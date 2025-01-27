@@ -25,6 +25,31 @@ const routes = [
         name: 'Home',
         component: () => import('@/views/HomeView.vue'),
       },
+      {
+        path: '/main/projects',
+        name: 'Projects',
+        component: () => import('@/views/ProjectsView.vue'),
+      },
+      {
+        path: '/main/tasks',
+        name: 'Tasks',
+        component: () => import('@/views/TasksView.vue'),
+      },
+      {
+        path: '/main/users',
+        name: 'Users',
+        component: () => import('@/views/UsersView.vue'),
+      },
+      {
+        path: '/main/reports',
+        name: 'Reports',
+        component: () => import('@/views/ReportsView.vue'),
+      },
+      {
+        path: '/main/settings',
+        name: 'Settings',
+        component: () => import('@/views/SettingsView.vue'),
+      },
     ],
   },
 ]
