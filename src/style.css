@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@300..700&display=swap');
+
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default
+}
+@theme {
+  --color-b-primary: #C8232C;
+  --color-b-secondary: #165DAD;
+  --color-b-tertiary: #ED7C0A;
+
+  --color-b-black-1: #242425;
+  --color-b-black-2: #575758;
+  --color-b-black-3: #8A8A8A;
+  --color-b-white-1: #FBF9F9;
+  --color-b-white-2: #F4EEEE;
+  --color-b-white-3: #E5E0E0;
+
+  --color-b-success: #3EC79C;
+  --color-b-warning: #EEDC5A;
+  --color-b-info: #3EC5C7;
+  --color-b-accent: #B06DD6;
+}
+
+:root {
+  /* COLORS */
+  --white-1: var(--color-b-white-1);
+  --white-2: var(--color-b-white-2);
+  --white-3: var(--color-b-white-3);
+
+  --black-1: var(--color-b-black-1);
+  --black-2: var(--color-b-black-2);
+  --black-3: var(--color-b-black-3);
+
+  --primary: var(--color-b-primary);
+  --secondary: var(--color-b-secondary);
+  --tertiary: var(--color-b-tertiary);
+
+  --success: var(--color-b-success);
+  --warning: var(--color-b-warning);
+  --info: var(--color-b-info);
+  --accent: var(--color-b-accent);
+  /* FONTS AND TEXT */
+  --font-family: 'Inter', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: 16px;
+  background-color: var(--white-1);
+  overflow-x: hidden;
+  color: var(--black-1);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  color: var(--black-1);
+  margin: 0;
+}
