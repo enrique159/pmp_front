@@ -1,8 +1,8 @@
 <template>
   <div class="h-full w-full flex">
     <section
-      class="h-full bg-white border-r border-b-white-3 transition-all relative"
-      :class="[expandMenu ? 'w-[240px] p-4' : 'w-[64px] p-1']"
+      class="h-full bg-white border-r border-b-white-3 transition-all relative flex flex-col justify-between"
+      :class="[expandMenu ? 'w-[240px] p-4 pb-6' : 'w-[64px] p-1 pb-3']"
     >
       <ul v-if="expandMenu" class="menu rounded-box w-full px-0 gap-3">
         <li v-for="item in menuItems" :key="`menu-item-expand-${item.name}`">
@@ -37,8 +37,13 @@
         </li>
       </ul>
 
+      <button class="btn btn-ghost btn-sm w-full text-b-black-2 p-2" @click="signOut">
+        <IconLogout2 class="w-6 h-6" />
+        <span v-if="expandMenu" class="font-bold">Cerrar Sesión</span>
+      </button>
+
       <button
-        class="btn btn-circle btn-outline border-b-white-3 shadow-sm bg-white absolute -right-4 bottom-8 p-2 rounded-full"
+        class="btn btn-circle btn-outline border-b-white-3 shadow-sm bg-white absolute -right-4 bottom-16 p-2 rounded-full"
         @click="expandMenu = !expandMenu"
       >
         <IconChevronRight
@@ -61,10 +66,19 @@ import {
   IconChartBar,
   IconUsersGroup,
   IconSettings,
+  IconLogout2
 } from '@tabler/icons-vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useApp } from '@/composables/useApp';
 
 const route = useRoute()
+const router = useRouter()
+const { logout } = useApp()
+
+const signOut = () => {
+  logout()
+  router.push({ name: 'SignIn' })
+}
 
 const expandMenu = ref(false)
 const currentPath = computed(() => route.path)

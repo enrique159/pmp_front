@@ -7,6 +7,7 @@
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-base-100">
       <div class="w-full max-w-md space-y-8">
         <div class="text-center">
+          <img src="@/assets/logo.png" alt="Logo" class="w-28 mb-4 mx-auto" />
           <h2 class="text-4xl font-bold text-primary mb-2">Bienvenido</h2>
           <p class="text-base-content/60">Ingresa a tu cuenta para continuar</p>
         </div>

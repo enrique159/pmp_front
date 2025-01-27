@@ -19,6 +19,15 @@ export const useApp = () => {
     appStore.setUser(newUser)
   }
 
+  function logout() {
+    appStore.setToken('')
+    appStore.setUser({
+      id: '',
+      name: '',
+      email: '',
+    })
+  }
+
   return {
     user,
     token,
@@ -27,5 +36,6 @@ export const useApp = () => {
     isAuthenticated,
     setToken,
     setUser,
+    logout,
   }
 }
