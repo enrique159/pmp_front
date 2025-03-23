@@ -17,9 +17,3 @@ export const signOut = async (): Promise<Response<string>> => {
   const response = await http.post<null, string>(url)
   return response
 }
-
-export const check = async (): Promise<Response<ISignInResponse>> => {
-  const url = Routes.check(env.apiBase)
-  const response = await http.get<null, ISignInResponse>(url)
-  return response
-}
