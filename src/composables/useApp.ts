@@ -10,6 +10,7 @@ export const useApp = () => {
   const getUser = computed(() => appStore.getUser)
   const getToken = computed(() => appStore.getToken)
   const isAuthenticated = computed(() => !!appStore.getToken)
+  const getUserAbbreviation = computed(() => user.value.name?.slice(0, 2).toUpperCase() || '')
 
   function setToken(newToken: string) {
     appStore.setToken(newToken)
@@ -34,6 +35,8 @@ export const useApp = () => {
     getUser,
     getToken,
     isAuthenticated,
+    getUserAbbreviation,
+    
     setToken,
     setUser,
     logout,

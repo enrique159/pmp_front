@@ -37,13 +37,27 @@
         </li>
       </ul>
 
-      <button class="btn btn-ghost btn-sm w-full text-b-black-2 p-2" @click="signOut">
-        <IconLogout2 class="w-6 h-6" />
-        <span v-if="expandMenu" class="font-bold">Cerrar Sesión</span>
-      </button>
+      <div class="flex flex-col gap-y-4">
+        <button class="cursor-pointer flex items-center" :class="{ 'justify-center items-center': !expandMenu, 'hover:bg-b-white-2 rounded-3xl p-2': expandMenu }">
+          <div class="avatar avatar-placeholder">
+            <div class="bg-neutral text-neutral-content w-12 rounded-full hover:outline-2 hover:outline-b-secondary hover:border-white hover:border-2 transition-all">
+              <span>{{ getUserAbbreviation }}</span>
+            </div>
+          </div>
+          <div v-if="expandMenu" class="flex flex-col justify-center items-start overflow-hidden">
+            <span class="text-b-black-2 text-sm ml-2">{{ user.name }}</span>
+            <span class="text-b-black-3 text-sm ml-2 text-ellipsis">Ver Perfil</span>
+          </div>
+        </button>
+  
+        <button class="btn btn-ghost btn-sm w-full text-b-black-2 p-2" @click="signOut">
+          <IconLogout2 class="w-6 h-6" />
+          <span v-if="expandMenu" class="font-bold">Cerrar Sesión</span>
+        </button>
+      </div>
 
       <button
-        class="btn btn-circle btn-outline border-b-white-3 shadow-sm bg-white absolute -right-4 bottom-16 p-2 rounded-full"
+        class="btn btn-circle btn-outline border-b-white-3 shadow-sm bg-white absolute -right-4 bottom-32 p-2 rounded-full"
         @click="expandMenu = !expandMenu"
       >
         <IconChevronRight
@@ -73,7 +87,7 @@ import { useApp } from '@/composables/useApp';
 
 const route = useRoute()
 const router = useRouter()
-const { logout } = useApp()
+const { logout, getUserAbbreviation, user } = useApp()
 
 const signOut = () => {
   logout()

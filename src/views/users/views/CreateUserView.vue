@@ -16,8 +16,11 @@
       <div class="card-body">
         <form @submit.prevent="handleSubmit">
           <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 mb-8">
-            <div class="col-span-1 md:col-span-2 lg:col-span-3 mb-4">
-              <p class="text-md text-b-black-1 font-bold">Información General</p>
+            <div class="col-span-1 md:col-span-2 lg:col-span-3">
+              <span class="text-md text-b-black-3 font-bold flex items-center gap-2">
+                <IconInfoCircle :size="18" />
+                Información General
+              </span>
               <div class="divider my-0"></div>
             </div>
             <fieldset class="fieldset">
@@ -72,36 +75,95 @@
             </fieldset>
           </section>
 
-          <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0">
-            <div class="col-span-1 md:col-span-2 lg:col-span-3 mb-4">
-              <p class="text-md text-b-black-1 font-bold">Información de Pago</p>
+          <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 mb-8">
+            <div class="col-span-1 md:col-span-2 lg:col-span-3">
+              <span class="text-md text-b-black-3 font-bold flex items-center gap-2">
+                <IconBusinessplan :size="18" />
+                Información de Pago
+              </span>
               <div class="divider my-0"></div>
             </div>
 
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Salario Diario</legend>
-              <input
-                v-model="createUserForm.salario_diario"
-                type="number"
-                class="input w-full"
-                placeholder="Ej. 1000"
-                @keydown="validateOnlyNumbers"
-              />
+              <div class="relative">
+                <input
+                  v-model="createUserForm.salario_diario"
+                  type="number"
+                  class="input w-full pl-7"
+                  placeholder="Ej. 1000"
+                  @keydown="validateOnlyNumbers"
+                />
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-black-2">$</span>
+              </div>
               <div class="flex flex-col text-b-tertiary text-xs font-medium">
                 <span v-for="(error, index) in v$.salario_diario.$errors" :key="`error-salario_diario-${index}`">{{ error.$message }}</span>
               </div>
             </fieldset>
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Salario Diario Integrado</legend>
+              <div class="relative">
+                <input
+                  v-model="createUserForm.salario_diario_integrado"
+                  type="number"
+                  class="input w-full pl-7"
+                  placeholder="Ej. 1000"
+                  @keydown="validateOnlyNumbers"
+                />
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-black-2">$</span>
+              </div>
+              <div class="flex flex-col text-b-tertiary text-xs font-medium">
+                <span v-for="(error, index) in v$.salario_diario_integrado.$errors" :key="`error-salario_diario_integrado-${index}`">{{ error.$message }}</span>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 mb-8">
+            <div class="col-span-1 md:col-span-2 lg:col-span-3">
+              <span class="text-md text-b-black-3 font-bold flex items-center gap-2">
+                <IconBriefcase2 :size="18" />
+                Información de puesto
+              </span>
+              <div class="divider my-0"></div>
+            </div>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Departamento</legend>
               <input
-                v-model="createUserForm.salario_diario_integrado"
+                v-model="createUserForm.departamento"
+                type="text"
+                class="input w-full"
+                placeholder="Ej. Servicios Generales"
+              />
+              <div class="flex flex-col text-b-tertiary text-xs font-medium">
+                <span v-for="(error, index) in v$.departamento.$errors" :key="`error-departamento-${index}`">{{ error.$message }}</span>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Puesto</legend>
+              <input
+                v-model="createUserForm.puesto"
+                type="text"
+                class="input w-full"
+                placeholder="Ej. Supervisor mecánico"
+              />
+              <div class="flex flex-col text-b-tertiary text-xs font-medium">
+                <span v-for="(error, index) in v$.puesto.$errors" :key="`error-puesto-${index}`">{{ error.$message }}</span>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Centro de costos</legend>
+              <input
+                v-model="createUserForm.centro_costos"
                 type="number"
                 class="input w-full"
-                placeholder="Ej. 1000"
+                placeholder="Ej. 940"
                 @keydown="validateOnlyNumbers"
               />
               <div class="flex flex-col text-b-tertiary text-xs font-medium">
-                <span v-for="(error, index) in v$.salario_diario_integrado.$errors" :key="`error-salario_diario_integrado-${index}`">{{ error.$message }}</span>
+                <span v-for="(error, index) in v$.centro_costos.$errors" :key="`error-centro_costos-${index}`">{{ error.$message }}</span>
               </div>
             </fieldset>
           </section>
@@ -120,7 +182,7 @@
 
 <script setup lang="ts">
 import { helpers, required } from '@vuelidate/validators'
-import { IconArrowLeft, IconBrandZapier } from '@tabler/icons-vue'
+import { IconArrowLeft, IconBrandZapier, IconInfoCircle, IconBusinessplan, IconBriefcase2 } from '@tabler/icons-vue'
 import { useVuelidate } from '@vuelidate/core'
 import { reactive } from 'vue'
 import { useToast } from '@/composables/useToast'
