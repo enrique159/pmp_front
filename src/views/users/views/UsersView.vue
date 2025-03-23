@@ -9,7 +9,7 @@
       <div class="card-body">
         <div class="flex justify-between items-center mb-4">
           <h2 class="card-title">Lista de Usuarios</h2>
-          <button class="btn btn-primary">Nuevo Usuario</button>
+          <router-link class="btn btn-primary" role="button" :to="{ name: 'CreateUser' }">Nuevo Usuario</router-link>
         </div>
         <!-- User list with roles and status -->
         <div class="overflow-x-auto">

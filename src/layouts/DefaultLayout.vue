@@ -9,7 +9,7 @@
           <router-link
             :to="item.path"
             :class="[
-              isCurrentPath(item.path) ? 'text-b-tertiary' : 'text-b-black-2',
+              isCurrentPath(item.module) ? 'text-b-tertiary' : 'text-b-black-2',
             ]"
           >
             <component :is="item.icon" class="w-6 h-6" />
@@ -28,7 +28,7 @@
             <router-link
               :to="item.path"
               :class="[
-                isCurrentPath(item.path) ? 'text-b-tertiary' : 'text-b-black-2',
+                isCurrentPath(item.module) ? 'text-b-tertiary' : 'text-b-black-2',
               ]"
             >
               <component :is="item.icon" class="w-6 h-6" />
@@ -81,42 +81,48 @@ const signOut = () => {
 }
 
 const expandMenu = ref(false)
-const currentPath = computed(() => route.path)
+const currentPath = computed(() => route.path.split('/')[2])
 
 const menuItems = [
   {
     name: 'Inicio',
     path: '/main/home',
+    module: 'home',
     icon: IconSmartHome,
   },
   {
     name: 'Proyectos',
     path: '/main/projects',
+    module: 'projects',
     icon: IconBrandAsana,
   },
   {
     name: 'Tareas',
     path: '/main/tasks',
+    module: 'tasks',
     icon: IconTopologyRing3,
   },
   {
     name: 'Usuarios',
     path: '/main/users',
+    module: 'users',
     icon: IconUsersGroup,
   },
   {
     name: 'Reportes',
     path: '/main/reports',
+    module: 'reports',
     icon: IconChartBar,
   },
   {
     name: 'Configuración',
     path: '/main/settings',
+    module: 'settings',
     icon: IconSettings,
   },
 ]
 
-const isCurrentPath = (path: string) => path.includes(currentPath.value)
+const isCurrentPath = (path: string) => path === currentPath.value
 </script>
 
 <style></style>
