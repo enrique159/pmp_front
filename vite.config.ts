@@ -10,7 +10,10 @@ export default defineConfig({
     tailwindcss()
   ],
   server: {
-    port: 8080
+    port: 8080,
+    watch: {
+      ignored: ['**/api/db.json']
+    }
   },
   resolve:{
     alias:{

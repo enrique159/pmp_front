@@ -16,8 +16,8 @@
       <div class="card-actions justify-end">
         <button type="submit" class="btn btn-primary rounded-full" :disabled="loadingUpdateDepartment">
           <span v-if="loadingUpdateDepartment" class="loading loading-spinner loading-xs"></span>
-          <IconBrandZapier v-else class="mr-2" />
-          Actualizar departamento
+          <IconDeviceFloppy v-else />
+          Guardar
         </button>
       </div>
     </form>
@@ -30,11 +30,13 @@ import { required, helpers, minLength } from '@vuelidate/validators'
 import { reactive, ref, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useDepartments } from '@/composables/useDepartments'
-import { IconBrandZapier } from '@tabler/icons-vue'
+import { IconDeviceFloppy } from '@tabler/icons-vue'
 import { Department } from '@/app/modules/departments/domain/department'
 
 const { success, warning, error } = useToast()
 const { updateDepartment } = useDepartments()
+
+const emits = defineEmits(['updated'])
 
 const props = defineProps<{
   selectedDepartment: Department | undefined | null
@@ -67,6 +69,7 @@ const handleSubmit = async () => {
   await updateDepartment(props.selectedDepartment?.id ?? '', editDepartmentForm)
     .then(() => {
       success('Departamento actualizado exitosamente')
+      emits('updated')
     })
     .catch((err) => {
       console.log(err)

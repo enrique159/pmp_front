@@ -1,6 +1,20 @@
 <template>
   <div class="md:min-w-[400px] px-4 pb-4">
     <form @submit.prevent="handleSubmit" class="space-y-4">
+      <!-- ADD A SELECTOR OF DEPARTMENTS -->
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Departamento</legend>
+        <select
+           class="select select-bordered w-full"
+          :value="updateActivityForm.department_id"
+          @change="handleDepartmentChange"
+        >
+          <option value="" disabled>-- Seleccione un departamento --</option>
+          <option v-for="(department, index) in departments" :key="`option-department-${index}`" :value="department.id">
+            {{ department.name }}
+          </option>
+        </select>
+      </fieldset>
       <fieldset class="fieldset">
         <legend class="fieldset-legend">Código</legend>
         <input
@@ -29,8 +43,8 @@
       <div class="card-actions justify-end">
         <button type="submit" class="btn btn-primary rounded-full" :disabled="loadingUpdateActivity">
           <span v-if="loadingUpdateActivity" class="loading loading-spinner loading-xs"></span>
-          <IconBrandZapier v-else class="mr-2" />
-          Actualizar actividad
+          <IconDeviceFloppy v-else />
+          Guardar
         </button>
       </div>
     </form>
@@ -43,17 +57,20 @@ import { required, helpers } from '@vuelidate/validators'
 import { onMounted, reactive, ref } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useDepartments } from '@/composables/useDepartments'
-import { IconBrandZapier } from '@tabler/icons-vue'
+import { IconDeviceFloppy } from '@tabler/icons-vue'
 import { Activity } from '@/app/modules/activities/domain/activity'
 
 const { success, warning, error } = useToast()
-const { updateActivity } = useDepartments()
+const { updateActivity, departments } = useDepartments()
+
+const emits = defineEmits(['updated'])
 
 const props = defineProps<{
   selectedActivity: Activity | undefined | null
 }>()
 
 const updateActivityForm = reactive({
+  department_id: '',
   code: '',
   description: '',
 })
@@ -69,6 +86,7 @@ const rules = {
 
 onMounted(() => {
   if (props.selectedActivity) {
+    updateActivityForm.department_id = props.selectedActivity.department_id
     updateActivityForm.code = props.selectedActivity.code
     updateActivityForm.description = props.selectedActivity.description
   }
@@ -76,14 +94,20 @@ onMounted(() => {
 
 const v = useVuelidate(rules, updateActivityForm)
 
+const handleDepartmentChange = (event: Event) => {
+  const target = event.target as any
+  updateActivityForm.department_id = target.value
+}
+
 const loadingUpdateActivity = ref(false)
 const handleSubmit = async () => {
   const isFormValid = await v.value.$validate()
   if (!isFormValid) return warning('Por favor, corrige los errores en el formulario')
   loadingUpdateActivity.value = true
-  await updateActivity(props.selectedActivity?.id ?? '', { ...updateActivityForm, department_id: props.selectedActivity?.department_id ?? '' })
+  await updateActivity(props.selectedActivity?.id ?? '', { ...updateActivityForm })
     .then(() => {
       success('Actividad actualizada exitosamente')
+      emits('updated')
     })
     .catch((err) => {
       console.log(err)

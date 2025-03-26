@@ -16,8 +16,8 @@
       <div class="card-actions justify-end">
         <button type="submit" class="btn btn-primary rounded-full" :disabled="loadingCreateDepartment">
           <span v-if="loadingCreateDepartment" class="loading loading-spinner loading-xs"></span>
-          <IconBrandZapier v-else class="mr-2" />
-          Crear departamento
+          <IconBrandZapier v-else />
+          Crear
         </button>
       </div>
     </form>
@@ -34,6 +34,8 @@ import { IconBrandZapier } from '@tabler/icons-vue'
 
 const { success, warning, error } = useToast()
 const { createDepartment } = useDepartments()
+
+const emits = defineEmits(['created'])
 
 const createDepartmentForm = reactive({
   name: '',
@@ -56,6 +58,7 @@ const handleSubmit = async () => {
   await createDepartment(createDepartmentForm)
     .then(() => {
       success('Departamento creado exitosamente')
+      emits('created')
     })
     .catch((err) => {
       console.log(err)

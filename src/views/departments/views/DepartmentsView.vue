@@ -8,13 +8,16 @@
     <div class="card bg-white shadow-sm mb-8">
       <div class="card-body">
         <div class="flex justify-between items-center mb-4 flex-wrap">
-          <h2 class="card-title">Lista de Departamentos</h2>
+          <div class="flex items-center gap-2">
+            <h2 class="card-title">Lista de Departamentos</h2>
+          </div>
           <button
             class="btn btn-primary rounded-full"
+            :class="{ 'btn-sm btn-circle': isMobile }"
             @click="showCreateDepartmentModal = true"
           >
             <IconPlus />
-            Nuevo Departamento
+            <span v-if="!isMobile">Nuevo Departamento</span>
           </button>
         </div>
 
@@ -26,17 +29,14 @@
           <div 
             v-for="department in departments" 
             :key="`card-department-${department.id}`"
-            class="card bg-base-100 shadow-sm cursor-pointer  hover:shadow-xl hover:scale-[1.01] transition-all"
+            class="card bg-base-100 shadow-sm cursor-pointer hover:shadow-xl hover:scale-[1.01] transition-all"
             :class="[
-              selectedDepartment?.id === department.id ? 'border-2 border-primary' : 'border-2 border-white'
+              selectedDepartment?.id === department.id ? 'border-2 border-primary' : 'border-2 border-base-300'
             ]"
-            @click.selft="selectDepartment(department)"
+            @click="selectDepartment(department)"
           >
             <div class="card-body p-4 pb-0">
-              <div>
-                <span class="text-xs text-b-black-3">Nombre</span>
-                <h3 class="card-title text-sm font-medium">{{ department.name }}</h3>
-              </div>
+              <h3 class="card-title font-bold">{{ department.name }}</h3>
             </div>
             <div class="card-footer flex justify-end px-2 pb-2">
               <button class="btn btn-ghost btn-circle btn-sm" @click="handleEditDepartment(department)">
@@ -50,20 +50,21 @@
 
     <div class="card bg-white shadow-sm">
       <div class="card-body">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="card-title">Actividades de {{ selectedDepartment?.name }}</h2>
-          <button class="btn bg-b-primary text-white rounded-full" @click="showCreateActivityModal = true">
+        <div class="flex justify-between items-center flex-wrap mb-4">
+          <h2 class="card-title">Actividades</h2>
+          <a class="btn btn-ghost btn-sm" @click="selectedDepartment = null">Mostrar todas</a>
+          <button class="btn bg-b-primary text-white rounded-full" :class="{ 'btn-sm btn-circle': isMobile }" @click="showCreateActivityModal = true">
             <IconPlus />
-            Nueva Actividad
+            <span v-if="!isMobile">Nueva Actividad</span>
           </button>
         </div>
         <!-- User list with roles and status -->
         <div class="overflow-x-auto">
-          <table class="table table-zebra w-full">
+          <table class="table w-full">
             <thead>
               <tr>
                 <th class="w-12"></th>
-                <th class="w-16">Código</th>
+                <th class="w-28">Código</th>
                 <th>Descripción</th>
                 <th>Departamento</th>
                 <th class="w-10">Acciones</th>
@@ -72,13 +73,24 @@
             <tbody>
               <tr class="hover" v-for="(activity, index) in filterActivitiesByDepartment" :key="`row-activity-${activity.id}`">
                 <td>{{ index + 1 }}</td>
-                <td>{{ activity.code }}</td>
+                <td>
+                  <div class="badge badge-neutral badge-ghost rounded-full">
+                    <span class="text-xs font-medium">{{ activity.code }}</span>
+                  </div>
+                </td>
                 <td>{{ activity.description }}</td>
                 <td>{{ activity.department }}</td>
-                <td>
-                  <button class="btn btn-ghost btn-circle btn-sm" @click="handleEditActivity(activity)">
-                    <IconEdit />
-                  </button>
+                <td class="flex justify-center gap-2 items-center">
+                  <div class="tooltip tooltip-left" data-tip="Editar">
+                    <button class="btn btn-ghost btn-circle btn-sm" @click="handleEditActivity(activity)">
+                      <IconEdit />
+                    </button>
+                  </div>
+                  <div class="tooltip tooltip-left" data-tip="Eliminar">
+                    <button class="btn btn-ghost btn-circle btn-sm text-red-400" :disabled="loadingDeleteActivity" @click="handleDeleteActivity(activity)">
+                      <IconTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -90,25 +102,37 @@
 
   <basic-modal v-model="showCreateDepartmentModal" :icon="IconCategory" title="Nuevo Departamento" allow-close fit-to-content>
     <template #content>
-      <create-department />
+      <create-department @created="() => {
+        showCreateDepartmentModal = false
+        fetchData()
+      }" />
     </template>
   </basic-modal>
 
   <basic-modal v-model="showCreateActivityModal" title="Nueva Actividad" allow-close fit-to-content>
     <template #content>
-      <create-activity :departmentId="selectedDepartment?.id" />
+      <create-activity :departmentId="selectedDepartment?.id" @created="() => {
+        showCreateActivityModal = false
+        fetchData()
+      }" />
     </template>
   </basic-modal>
 
   <basic-modal v-model="showEditDepartmentModal" title="Editar Departamento" allow-close fit-to-content>
     <template #content>
-      <edit-department :selected-department="selectedEditDepartment" />
+      <edit-department :selected-department="selectedEditDepartment" @updated="() => {
+        showEditDepartmentModal = false
+        fetchData()
+      }" />
     </template>
   </basic-modal>
 
   <basic-modal v-model="showEditActivityModal" title="Editar Actividad" allow-close fit-to-content>
     <template #content>
-      <edit-activity :selected-activity="selectedEditActivity" />
+      <edit-activity :selected-activity="selectedEditActivity" @updated="() => {
+        showEditActivityModal = false
+        fetchData()
+      }" />
     </template>
   </basic-modal>
 </template>
@@ -120,16 +144,25 @@ import CreateActivity from '../components/CreateActivity.vue'
 import EditDepartment from '../components/EditDepartment.vue'
 import EditActivity from '../components/EditActivity.vue'
 import { Department } from '@/app/modules/departments/domain/department'
-import { IconPlus, IconEdit, IconCategory } from '@tabler/icons-vue'
+import { IconPlus, IconEdit, IconCategory, IconTrash } from '@tabler/icons-vue'
 import { useDepartments } from '@/composables/useDepartments'
 import { computed, ref } from 'vue'
 import { Activity } from '@/app/modules/activities/domain/activity'
+import { useWindowSize } from '@vueuse/core'
+import { useToast } from '@/composables/useToast'
 
-const { getDepartments, departments, getActivities, activities } = useDepartments()
+// Declaración para TypeScript
+declare const confirm: (message: string) => boolean;
+
+const { width } = useWindowSize()
+const { success, error } = useToast()
+const isMobile = computed(() => width.value < 768)
+
+const { getDepartments, departments, getActivities, activities, deleteActivity } = useDepartments()
 
 const loading = ref(false)
 
-const fetchDepartments = async () => {
+const fetchData = async () => {
   loading.value = true
   await getDepartments({})
     .catch((error) => {
@@ -144,7 +177,7 @@ const fetchDepartments = async () => {
   loading.value = false
 }
 
-fetchDepartments()
+fetchData()
 
 const filterActivitiesByDepartment = computed(() => {
   if (!selectedDepartment.value) return activities.value.map((activity: Activity) => ({
@@ -185,6 +218,25 @@ const selectedEditActivity = ref<Activity | null>(null)
 const handleEditActivity = (activity: Activity) => {
   selectedEditActivity.value = activity
   showEditActivityModal.value = true
+}
+
+// Delete activity
+const loadingDeleteActivity = ref(false)
+const handleDeleteActivity = async (activity: Activity) => {
+  if (!confirm('¿Está seguro de eliminar esta actividad?')) return
+  loadingDeleteActivity.value = true
+  await deleteActivity(activity.id || '')
+    .then(() => {
+      fetchData()
+      success('Actividad eliminada exitosamente')
+    })
+    .catch((err) => {
+      console.log(err)
+      error('Error al eliminar la actividad')
+    })
+    .finally(() => {
+      loadingDeleteActivity.value = false
+    })
 }
 </script>
 

@@ -31,6 +31,9 @@ export const useDepartments = () => {
   function updateActivity(activityId: string, activity: Partial<Activity>) {
     return departmentStore.updateActivity(activityId, activity)
   }
+  function deleteActivity(activityId: string) {
+    return departmentStore.deleteActivity(activityId)
+  }
 
   return {
     departments,
@@ -41,6 +44,7 @@ export const useDepartments = () => {
     deleteDepartment,
     getActivities,
     createActivity,
-    updateActivity
+    updateActivity,
+    deleteActivity
   }
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="p-6 w-full h-full bg-white-1 overflow-y-auto space-y-4">
-    <form @submit.prevent="handleSubmit">
+  <div class="p-6 w-full h-full bg-white-1 space-y-4">
+    <form @submit.prevent="handleSubmit" class="pb-12">
       <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 mb-8">
         <div class="col-span-1 md:col-span-2 lg:col-span-3">
           <span class="text-md text-b-black-3 font-bold flex items-center gap-2">
@@ -10,7 +10,7 @@
           <div class="divider my-0"></div>
         </div>
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Código</legend>
+          <legend class="fieldset-legend required">Código</legend>
           <input
             v-model="editUserForm.code"
             type="text"
@@ -22,7 +22,7 @@
           </div>
         </fieldset>
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Nombre</legend>
+          <legend class="fieldset-legend required">Nombre</legend>
           <input
             v-model="editUserForm.name"
             type="text"
@@ -34,7 +34,7 @@
           </div>
         </fieldset>
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Email</legend>
+          <legend class="fieldset-legend required">Email</legend>
           <input
             v-model="editUserForm.email"
             type="email"
@@ -46,25 +46,7 @@
           </div>
         </fieldset>
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Contraseña</legend>
-          <div class="relative">
-            <input
-              v-model="editUserForm.password"
-              :type="showPassword ? 'text' : 'password'"
-              class="input w-full"
-              placeholder="Ej. 12345678"
-            />
-            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" @click="showPassword = !showPassword">
-              <IconEye v-if="showPassword" />
-              <IconEyeOff v-else />
-            </button>
-          </div>
-          <div class="flex flex-col text-b-tertiary text-xs font-medium">
-            <span v-for="(error, index) in v$.password.$errors" :key="`error-password-${index}`">{{ error.$message }}</span>
-          </div>
-        </fieldset>
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">NSS</legend>
+          <legend class="fieldset-legend required">NSS</legend>
           <input
             v-model="editUserForm.nss"
             type="text"
@@ -85,9 +67,6 @@
             placeholder="Ej. 123456789"
             @keydown="validateNumbersAndLetters"
           />
-          <div class="flex flex-col text-b-tertiary text-xs font-medium">
-            <span v-for="(error, index) in v$.employer_registration.$errors" :key="`error-employer_registration-${index}`">{{ error.$message }}</span>
-          </div>
         </fieldset>
         <fieldset class="fieldset">
           <legend class="fieldset-legend">Fecha de Ingreso</legend>
@@ -97,36 +76,6 @@
             class="input w-full"
             placeholder="Ej. 2023-01-01"
           />
-          <div class="flex flex-col text-b-tertiary text-xs font-medium">
-            <span v-for="(error, index) in v$.hire_date.$errors" :key="`error-hire_date-${index}`">{{ error.$message }}</span>
-          </div>
-        </fieldset>
-      </section>
-
-      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 mb-8">
-        <div class="col-span-1 md:col-span-2 lg:col-span-3">
-          <span class="text-md text-b-black-3 font-bold flex items-center gap-2">
-            <IconBusinessplan :size="18" />
-            Información de Pago
-          </span>
-          <div class="divider my-0"></div>
-        </div>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">Salario Diario</legend>
-          <div class="relative">
-            <input
-              v-model="editUserForm.daily_salary"
-              type="number"
-              class="input w-full pl-7"
-              placeholder="Ej. 1000"
-              @keydown="validateOnlyNumbers"
-            />
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-black-2">$</span>
-          </div>
-          <div class="flex flex-col text-b-tertiary text-xs font-medium">
-            <span v-for="(error, index) in v$.daily_salary.$errors" :key="`error-daily_salary-${index}`">{{ error.$message }}</span>
-          </div>
         </fieldset>
       </section>
 
@@ -141,19 +90,19 @@
 
         <fieldset class="fieldset">
           <legend class="fieldset-legend">Departamento</legend>
-          <input
-            v-model="editUserForm.department_id"
-            type="text"
-            class="input w-full"
-            placeholder="Ej. Servicios Generales"
-          />
-          <div class="flex flex-col text-b-tertiary text-xs font-medium">
-            <span v-for="(error, index) in v$.department_id.$errors" :key="`error-department_id-${index}`">{{ error.$message }}</span>
-          </div>
+          <select
+            class="select select-bordered w-full"
+            :value="editUserForm.department_id"
+            @change="handleDepartmentChange"
+          >
+            <option v-for="(department, index) in departments" :key="`option-department-${index}`" :value="department.id">
+              {{ department.name }}
+            </option>
+          </select>
         </fieldset>
 
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Puesto</legend>
+          <legend class="fieldset-legend required">Puesto</legend>
           <input
             v-model="editUserForm.position"
             type="text"
@@ -166,6 +115,20 @@
         </fieldset>
 
         <fieldset class="fieldset">
+          <legend class="fieldset-legend">Salario Diario</legend>
+          <div class="relative">
+            <input
+              v-model="editUserForm.daily_salary"
+              type="number"
+              class="input w-full pl-7"
+              placeholder="Ej. 1000"
+              @keydown="validateOnlyNumbers"
+            />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-black-2">$</span>
+          </div>
+        </fieldset>
+
+        <fieldset class="fieldset">
           <legend class="fieldset-legend">Centro de costos</legend>
           <input
             v-model="editUserForm.cost_center"
@@ -174,9 +137,6 @@
             placeholder="Ej. 940"
             @keydown="validateOnlyNumbers"
           />
-          <div class="flex flex-col text-b-tertiary text-xs font-medium">
-            <span v-for="(error, index) in v$.cost_center.$errors" :key="`error-cost_center-${index}`">{{ error.$message }}</span>
-          </div>
         </fieldset>
       </section>
 
@@ -193,13 +153,14 @@
 
 <script setup lang="ts">
 import { helpers, required } from '@vuelidate/validators'
-import { IconInfoCircle, IconBusinessplan, IconBriefcase2, IconDeviceFloppy, IconEye, IconEyeOff } from '@tabler/icons-vue'
+import { IconInfoCircle, IconBriefcase2, IconDeviceFloppy, } from '@tabler/icons-vue'
 import { useVuelidate } from '@vuelidate/core'
 import { reactive, ref, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { validateNumbersAndLetters, validateOnlyNumbers } from '@/utils/InputValidators'
 import { useUsers } from '@/composables/useUsers'
 import { User } from '@/app/modules/users/domain/user'
+import { useDepartments } from '@/composables/useDepartments'
 
 const props = defineProps({
   selectedUser: {
@@ -212,13 +173,10 @@ const emit = defineEmits(['update:user'])
 
 const { warning, success, error } = useToast()
 
-const showPassword = ref(false)
-
 const editUserForm = reactive({
   code: '',
   name: '',
   email: '',
-  password: '',
   nss: '',
   employer_registration: '',
   hire_date: new Date().toISOString().split('T')[0],
@@ -227,11 +185,6 @@ const editUserForm = reactive({
   position: '',
   cost_center: '',
 })
-
-const strongPassword = (value: string) => {
-  if (!value) return true
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)
-}
 
 const rules = {
   code: {
@@ -243,21 +196,8 @@ const rules = {
   email: {
     required: helpers.withMessage('El email es obligatorio', required),
   },
-  password: {
-    required: helpers.withMessage('La contraseña es obligatoria', required),
-    strongPassword: helpers.withMessage('La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial', strongPassword),
-  },
   nss: {
     required: helpers.withMessage('El NSS es obligatorio', required),
-  },
-  employer_registration: {
-    required: helpers.withMessage('El registro patrónal es obligatorio', required),
-  },
-  hire_date: {
-    required: helpers.withMessage('La fecha de ingreso es obligatoria', required),
-  },
-  daily_salary: {
-    required: helpers.withMessage('El salario diario es obligatorio', required),
   },
   department_id: {
     required: helpers.withMessage('El departamento es obligatorio', required),
@@ -265,15 +205,30 @@ const rules = {
   position: {
     required: helpers.withMessage('El puesto es obligatorio', required),
   },
-  cost_center: {
-    required: helpers.withMessage('El centro de costos es obligatorio', required),
-  },
 }
 
 const v$ = useVuelidate(rules, editUserForm)
 
 const { updateUser } = useUsers()
+const { departments, getDepartments } = useDepartments()
 const loadingUpdateUser = ref(false)
+const loadingDepartments = ref(false)
+
+const handleDepartmentChange = (event: Event) => {
+  const target = event.target as any
+  editUserForm.department_id = target.value
+}
+
+const fetchDepartments = async () => {
+  loadingDepartments.value = true
+  await getDepartments({})
+    .catch(() => {
+      error('Ocurrió un error al cargar los departamentos')
+    })
+    .finally(() => {
+      loadingDepartments.value = false
+    })
+}
 
 onMounted(() => {
   // Populate form with selectedUser data
@@ -281,7 +236,6 @@ onMounted(() => {
     editUserForm.code = props.selectedUser.code
     editUserForm.name = props.selectedUser.name
     editUserForm.email = props.selectedUser.email
-    editUserForm.password = props.selectedUser.password
     editUserForm.nss = props.selectedUser.nss
     editUserForm.hire_date = new Date(props.selectedUser.hire_date).toISOString().split('T')[0]
     editUserForm.daily_salary = props.selectedUser.daily_salary || 0
@@ -289,13 +243,14 @@ onMounted(() => {
     editUserForm.position = props.selectedUser.position
     editUserForm.cost_center = props.selectedUser.cost_center || ''
   }
+  fetchDepartments()
 })
 
 const handleSubmit = async() => {
   const isFormValid = await v$.value.$validate()
   if (!isFormValid) return warning('Por favor, corrige los errores en el formulario')
   
-  const payload: User = {
+  const payload: Partial<User> = {
     ...props.selectedUser, // Keep original data
     ...editUserForm, // Override with edited data
     hire_date: new Date(editUserForm.hire_date),
@@ -303,8 +258,7 @@ const handleSubmit = async() => {
   }
 
   loadingUpdateUser.value = true
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  await updateUser(payload)
+  await updateUser(props.selectedUser?.id ?? '', payload)
     .then(() => {
       success('Usuario actualizado exitosamente')
       emit('update:user', payload)

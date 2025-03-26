@@ -1,6 +1,19 @@
 <template>
   <div class="md:min-w-[400px] px-4 pb-4">
     <form @submit.prevent="handleSubmit" class="space-y-4">
+      <!-- ADD A SELECTOR OF DEPARTMENTS -->
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Departamento</legend>
+        <select
+          v-model="createActivityForm.department_id"
+          class="select select-bordered w-full"
+        >
+          <option value="" disabled>-- Seleccione un departamento --</option>
+          <option v-for="(department, index) in departments" :key="`option-department-${index}`" :value="department.id">
+            {{ department.name }}
+          </option>
+        </select>
+      </fieldset>
       <fieldset class="fieldset">
         <legend class="fieldset-legend">Código</legend>
         <input
@@ -29,8 +42,8 @@
       <div class="card-actions justify-end">
         <button type="submit" class="btn btn-primary rounded-full" :disabled="loadingCreateActivity">
           <span v-if="loadingCreateActivity" class="loading loading-spinner loading-xs"></span>
-          <IconBrandZapier v-else class="mr-2" />
-          Crear actividad
+          <IconBrandZapier v-else />
+          Crear
         </button>
       </div>
     </form>
@@ -40,21 +53,28 @@
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useDepartments } from '@/composables/useDepartments'
 import { IconBrandZapier } from '@tabler/icons-vue'
 
 const { success, warning, error } = useToast()
-const { createActivity } = useDepartments()
+const { createActivity, departments } = useDepartments()
 
 const props = defineProps<{
   departmentId: string | undefined
 }>()
 
+const emits = defineEmits(['created'])
+
 const createActivityForm = reactive({
+  department_id: '',
   code: '',
   description: '',
+})
+
+onMounted(() => {
+  createActivityForm.department_id = props.departmentId || ''
 })
 
 const rules = {
@@ -73,9 +93,10 @@ const handleSubmit = async () => {
   const isFormValid = await v.value.$validate()
   if (!isFormValid) return warning('Por favor, corrige los errores en el formulario')
   loadingCreateActivity.value = true
-  await createActivity({ ...createActivityForm, department_id: props.departmentId ?? '' })
+  await createActivity({ ...createActivityForm })
     .then(() => {
       success('Actividad creada exitosamente')
+      emits('created')
     })
     .catch((err) => {
       console.log(err)

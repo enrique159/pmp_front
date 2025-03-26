@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 w-full h-full bg-white-1 overflow-y-auto">
+  <div class="p-6 w-full h-full bg-white-1 overflow-y-auto container mx-auto">
     <header class="mb-6">
       <h1 class="text-3xl font-bold text-black-1">Usuarios</h1>
       <p class="text-black-2">Gestiona los usuarios y sus roles en el sistema</p>
@@ -14,9 +14,13 @@
             Nuevo Usuario
           </router-link>
         </div>
+
+        <div v-if="loadingUsers || loadingDepartments" class="w-full grid place-items-center">
+          <span class="loading loading-spinner text-b-secondary loading-xl"></span>
+        </div>
         <!-- User list with roles and status -->
         <div class="overflow-x-auto">
-          <table class="table table-zebra w-full">
+          <table class="table w-full">
             <thead>
               <tr>
                 <th>Código</th>
@@ -34,16 +38,25 @@
                 <td>{{ user.code }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.department_id }}</td>
+                <td>{{ getDepartmentById(user.department_id)?.name }}</td>
                 <td>{{ user.position }}</td>
-                <td><span class="badge badge-ghost">{{ user.cost_center }}</span></td>
+                <td><span v-if="user.cost_center" class="badge badge-ghost">{{ user.cost_center }}</span></td>
                 <td>
                   <span class="badge" :class="{ 'badge-success text-white': user.status === 'A', 'badge-neutral': user.status === 'R' }">
                     {{ user.status === 'A' ? 'activo' : 'inactivo' }}
                   </span>
                 </td>
-                <td>
-                  <button class="btn btn-ghost btn-xs" @click="handleEditUser(user)">Editar</button>
+                <td class="flex justify-center gap-2 items-center">
+                  <div class="tooltip tooltip-left" data-tip="Editar">
+                    <button class="btn btn-ghost btn-circle btn-sm" @click="handleEditUser(user)">
+                      <IconEdit />
+                    </button>
+                  </div>
+                  <div class="tooltip tooltip-left" data-tip="Eliminar">
+                    <button class="btn btn-ghost btn-circle btn-sm text-red-400" :disabled="loadingDeleteUser" @click="handleDeleteUser(user)">
+                      <IconTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -64,18 +77,23 @@
 <script lang="ts" setup>
 import BasicModal from '@/components/BasicModal.vue';
 import EditUser from '@/views/users/components/EditUser.vue';
-import { IconUserPlus } from '@tabler/icons-vue';
+import { IconUserPlus, IconEdit, IconTrash } from '@tabler/icons-vue';
 import { useUsers } from '@/composables/useUsers';
 import { ref } from 'vue';
 import { User } from '@/app/modules/users/domain/user';
+import { useDepartments } from '@/composables/useDepartments';
+import { useToast } from '@/composables/useToast';
 
-const { users, fetchUsers } = useUsers();
+declare const confirm: (message: string) => boolean;
+
+const { users, fetchUsers, deleteUser } = useUsers();
+const { departments, getDepartments } = useDepartments();
+const { success, error } = useToast();
 
 const loadingUsers = ref(false);
 const getUsers = async () => {
   loadingUsers.value = true;
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  await fetchUsers()
+  await fetchUsers({})
     .then((response) => {
       console.log(response);
     })
@@ -87,8 +105,27 @@ const getUsers = async () => {
     });
 };
 
+const loadingDepartments = ref(false);
+const fetchDepartments = async () => {
+  loadingDepartments.value = true;
+  await getDepartments({})
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loadingDepartments.value = false;
+    });
+};
+
+fetchDepartments();
 getUsers();
 
+const getDepartmentById = (id: string) => {
+  return departments.value.find((department) => department.id === id);
+};
 
 // UPDATE USER
 const showEditUserModal = ref(false);
@@ -102,5 +139,26 @@ const handleEditUser = (user: User) => {
 const handleUpdateUser = (user: User) => {
   selectedUser.value = user;
   showEditUserModal.value = false;
+  getUsers();
 };
+
+// DELETE USER
+const loadingDeleteUser = ref(false);
+const handleDeleteUser = async (user: User) => {
+  loadingDeleteUser.value = true;
+  if (!confirm('¿Está seguro de eliminar este usuario?')) return;
+  await deleteUser(user.id ?? '')
+    .then(() => {
+      success('Usuario eliminado correctamente');
+      getUsers();
+    })
+    .catch((err) => {
+      console.log(err);
+      error('Error al eliminar el usuario')
+    })
+    .finally(() => {
+      loadingDeleteUser.value = false;
+    });
+};
+
 </script>

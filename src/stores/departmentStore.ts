@@ -10,7 +10,8 @@ import { Activity } from '@/app/modules/activities/domain/activity'
 import {
   getActivities as getActivitiesUseCase, 
   createActivity as createActivityUseCase,
-  updateActivity as updateActivityUseCase
+  updateActivity as updateActivityUseCase,
+  deleteActivity as deleteActivityUseCase
 } from '@/app/modules/activities/ActivityRepository'
 import { PageFilters } from '@/app/network/domain/interfaces/FetchPage'
 
@@ -117,6 +118,19 @@ export const useDepartmentStore = defineStore('department', {
           if (index !== -1) {
             this.activities[index] = response.data
           }
+          return response
+        })
+        .catch((error: Error) => {
+          throw error
+        })
+      return action
+    },
+
+    // DELETE ACTIVITY
+    async deleteActivity(activityId: string) {
+      const action = await deleteActivityUseCase(activityId)
+        .then((response) => {
+          this.activities = this.activities.filter((a) => a.id !== activityId)
           return response
         })
         .catch((error: Error) => {

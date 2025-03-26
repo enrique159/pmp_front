@@ -24,7 +24,7 @@
               <div class="divider my-0"></div>
             </div>
             <fieldset class="fieldset">
-              <legend class="fieldset-legend">Código</legend>
+              <legend class="fieldset-legend required">Código</legend>
               <input
                 v-model="createUserForm.code"
                 type="text"
@@ -36,7 +36,7 @@
               </div>
             </fieldset>
             <fieldset class="fieldset">
-              <legend class="fieldset-legend">Nombre</legend>
+              <legend class="fieldset-legend required">Nombre</legend>
               <input
                 v-model="createUserForm.name"
                 type="text"
@@ -48,7 +48,7 @@
               </div>
             </fieldset>
             <fieldset class="fieldset">
-              <legend class="fieldset-legend">Email</legend>
+              <legend class="fieldset-legend required">Email</legend>
               <input
                 v-model="createUserForm.email"
                 type="email"
@@ -61,7 +61,7 @@
             </fieldset>
 
             <fieldset class="fieldset">
-              <legend class="fieldset-legend">Contraseña</legend>
+              <legend class="fieldset-legend required">Contraseña</legend>
               <div class="relative">
                 <input
                   v-model="createUserForm.password"
@@ -69,7 +69,7 @@
                   class="input w-full"
                   placeholder="Ej. 12345678"
                 />
-                <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" @click="showPassword = !showPassword">
+                <button type="button" tabindex="-1" class="absolute right-2 top-1/2 -translate-y-1/2" @click="showPassword = !showPassword">
                   <IconEye v-if="showPassword" />
                   <IconEyeOff v-else />
                 </button>
@@ -80,7 +80,7 @@
             </fieldset>
 
             <fieldset class="fieldset">
-              <legend class="fieldset-legend">NSS</legend>
+              <legend class="fieldset-legend required">NSS</legend>
               <input
                 v-model="createUserForm.nss"
                 type="text"
@@ -101,9 +101,6 @@
                 placeholder="Ej. 123456789"
                 @keydown="validateNumbersAndLetters"
               />
-              <div class="flex flex-col text-b-tertiary text-xs font-medium">
-                <span v-for="(error, index) in v$.employer_registration.$errors" :key="`error-employer_registration-${index}`">{{ error.$message }}</span>
-              </div>
             </fieldset>
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Fecha de Ingreso</legend>
@@ -113,36 +110,6 @@
                 class="input w-full"
                 placeholder="Ej. 2023-01-01"
               />
-              <div class="flex flex-col text-b-tertiary text-xs font-medium">
-                <span v-for="(error, index) in v$.hire_date.$errors" :key="`error-hire_date-${index}`">{{ error.$message }}</span>
-              </div>
-            </fieldset>
-          </section>
-
-          <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 mb-8">
-            <div class="col-span-1 md:col-span-2 lg:col-span-3">
-              <span class="text-md text-b-black-3 font-bold flex items-center gap-2">
-                <IconBusinessplan :size="18" />
-                Información de Pago
-              </span>
-              <div class="divider my-0"></div>
-            </div>
-
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend">Salario Diario</legend>
-              <div class="relative">
-                <input
-                  v-model="createUserForm.daily_salary"
-                  type="number"
-                  class="input w-full pl-7"
-                  placeholder="Ej. 1000"
-                  @keydown="validateOnlyNumbers"
-                />
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-black-2">$</span>
-              </div>
-              <div class="flex flex-col text-b-tertiary text-xs font-medium">
-                <span v-for="(error, index) in v$.daily_salary.$errors" :key="`error-daily_salary-${index}`">{{ error.$message }}</span>
-              </div>
             </fieldset>
           </section>
 
@@ -157,19 +124,19 @@
 
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Departamento</legend>
-              <input
-                v-model="createUserForm.department_id"
-                type="text"
-                class="input w-full"
-                placeholder="Ej. Servicios Generales"
-              />
-              <div class="flex flex-col text-b-tertiary text-xs font-medium">
-                <span v-for="(error, index) in v$.department_id.$errors" :key="`error-department_id-${index}`">{{ error.$message }}</span>
-              </div>
+              <select
+                class="select select-bordered w-full"
+                :value="createUserForm.department_id"
+                @change="handleDepartmentChange"
+              >
+                <option v-for="(department, index) in departments" :key="`option-department-${index}`" :value="department.id">
+                  {{ department.name }}
+                </option>
+              </select>
             </fieldset>
 
             <fieldset class="fieldset">
-              <legend class="fieldset-legend">Puesto</legend>
+              <legend class="fieldset-legend required">Puesto</legend>
               <input
                 v-model="createUserForm.position"
                 type="text"
@@ -182,6 +149,20 @@
             </fieldset>
 
             <fieldset class="fieldset">
+              <legend class="fieldset-legend">Salario Diario</legend>
+              <div class="relative">
+                <input
+                  v-model="createUserForm.daily_salary"
+                  type="number"
+                  class="input w-full pl-7"
+                  placeholder="Ej. 1000"
+                  @keydown="validateOnlyNumbers"
+                />
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-black-2">$</span>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
               <legend class="fieldset-legend">Centro de costos</legend>
               <input
                 v-model="createUserForm.cost_center"
@@ -190,9 +171,6 @@
                 placeholder="Ej. 940"
                 @keydown="validateOnlyNumbers"
               />
-              <div class="flex flex-col text-b-tertiary text-xs font-medium">
-                <span v-for="(error, index) in v$.cost_center.$errors" :key="`error-cost_center-${index}`">{{ error.$message }}</span>
-              </div>
             </fieldset>
           </section>
 
@@ -211,13 +189,14 @@
 
 <script setup lang="ts">
 import { helpers, required } from '@vuelidate/validators'
-import { IconArrowLeft, IconBrandZapier, IconInfoCircle, IconBusinessplan, IconBriefcase2 } from '@tabler/icons-vue'
+import { IconArrowLeft, IconBrandZapier, IconInfoCircle, IconBriefcase2, IconEye, IconEyeOff } from '@tabler/icons-vue'
 import { useVuelidate } from '@vuelidate/core'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { validateNumbersAndLetters, validateOnlyNumbers } from '@/utils/InputValidators'
 import { useUsers } from '@/composables/useUsers'
 import { User } from '@/app/modules/users/domain/user'
+import { useDepartments } from '@/composables/useDepartments'
 
 const { warning, success, error } = useToast()
 const showPassword = ref(false)
@@ -257,29 +236,44 @@ const rules = {
   nss: {
     required: helpers.withMessage('El NSS es obligatorio', required),
   },
-  employer_registration: {
-    required: helpers.withMessage('El registro patrónal es obligatorio', required),
-  },
-  hire_date: {
-    required: helpers.withMessage('La fecha de ingreso es obligatoria', required),
-  },
-  daily_salary: {
-    required: helpers.withMessage('El salario diario es obligatorio', required),
-  },
   department_id: {
     required: helpers.withMessage('El departamento es obligatorio', required),
   },
   position: {
     required: helpers.withMessage('El puesto es obligatorio', required),
   },
-  cost_center: {
-    required: helpers.withMessage('El centro de costos es obligatorio', required),
-  },
 }
 
 const v$ = useVuelidate(rules, createUserForm)
 
 const { createUser } = useUsers()
+const { departments, getDepartments } = useDepartments()
+
+const loadingFetchDepartments = ref(false)
+const fetchDepartments = async () => {
+  loadingFetchDepartments.value = true
+  await getDepartments({})
+    .then(() => {
+      createUserForm.department_id = departments.value[0].id || ''
+    })
+    .catch((err) => {
+      console.log(err)
+      error('Ocurrió un error al cargar los departamentos')
+    })
+    .finally(() => {
+      loadingFetchDepartments.value = false
+    })
+}
+
+const handleDepartmentChange = (event: Event) => {
+  const target = event.target as any
+  createUserForm.department_id = target.value
+}
+
+onMounted(() => {
+  fetchDepartments()
+})
+
 const loadingCreateUser = ref(false)
 const handleSubmit = async() => {
   const isFormValid = await v$.value.$validate()
