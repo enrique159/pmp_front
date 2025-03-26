@@ -10,18 +10,26 @@ const getUser = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}users/$
 const createUser = (baseUrl: string) => `${finishSlash(baseUrl)}users`
 const updateUser = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}users/${id}`
 const deleteUser = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}users/${id}`
-// PROJECTS ROUTES
-const getProjects = (baseUrl: string) => `${finishSlash(baseUrl)}projects`
-const getProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
-const createProject = (baseUrl: string) => `${finishSlash(baseUrl)}projects`
-const updateProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
-const deleteProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
+// DEPARTMENTS ROUTES
+const getDepartments = (baseUrl: string) => `${finishSlash(baseUrl)}departments`
+const getDepartment = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}departments/${id}`
+const createDepartment = (baseUrl: string) => `${finishSlash(baseUrl)}departments`
+const updateDepartment = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}departments/${id}`
+const deleteDepartment = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}departments/${id}`
+
 // ACTIVITIES ROUTES
 const getActivities = (baseUrl: string) => `${finishSlash(baseUrl)}activities`
 const getActivity = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}activities/${id}`
 const createActivity = (baseUrl: string) => `${finishSlash(baseUrl)}activities`
 const updateActivity = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}activities/${id}`
 const deleteActivity = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}activities/${id}`
+
+// PROJECTS ROUTES
+const getProjects = (baseUrl: string) => `${finishSlash(baseUrl)}projects`
+const getProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
+const createProject = (baseUrl: string) => `${finishSlash(baseUrl)}projects`
+const updateProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
+const deleteProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
 
 export default {
   // AUTH ROUTES
@@ -33,6 +41,12 @@ export default {
   createUser,
   updateUser,
   deleteUser,
+  // DEPARTMENTS ROUTES
+  getDepartments,
+  getDepartment,
+  createDepartment,
+  updateDepartment,
+  deleteDepartment,
   // PROJECTS ROUTES
   getProjects,
   getProject,

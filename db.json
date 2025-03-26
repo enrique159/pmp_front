@@ -1,0 +1,154 @@
+{
+  "departments": [
+    {
+      "id": 1,
+      "name": "Ventas"
+    },
+    {
+      "id": 2,
+      "name": "Mercadotecnia"
+    },
+    {
+      "id": 3,
+      "name": "Recursos Humanos"
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "department_id": 1,
+      "code": "CAL-2",
+      "description": "Calidad"
+    },
+    {
+      "id": 2,
+      "department_id": 1,
+      "code": "CAL-1",
+      "description": "Seguimiento a proyectos"
+    },
+    {
+      "id": 3,
+      "department_id": 2,
+      "code": "MAR-1",
+      "description": "Marketing"
+    },
+    {
+      "id": 4,
+      "department_id": 2,
+      "code": "MAR-2",
+      "description": "Marketing 2"
+    },
+    {
+      "id": 5,
+      "department_id": 3,
+      "code": "X002",
+      "description": "REVISAR CANDIDATOS"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "Sistema de ventilación industrial",
+      "status": "active",
+      "type": "Chicago Blower",
+      "client": "Industrias Metálicas S.A.",
+      "start_date": "2025-01-15T00:00:00.000Z",
+      "end_date": "2025-06-30T00:00:00.000Z",
+      "budget": 125000
+    },
+    {
+      "id": 2,
+      "name": "Instalación de grúas para almacén",
+      "status": "active",
+      "type": "Strong Kranes",
+      "client": "Logística Global",
+      "start_date": "2025-02-10T00:00:00.000Z",
+      "end_date": "2025-07-20T00:00:00.000Z",
+      "budget": 180000
+    },
+    {
+      "id": 3,
+      "name": "Equipamiento de refrigeración",
+      "status": "inactive",
+      "type": "ARKO",
+      "client": "Frigoríficos del Norte",
+      "start_date": "2024-11-05T00:00:00.000Z",
+      "end_date": "2025-02-15T00:00:00.000Z",
+      "budget": 95000
+    },
+    {
+      "id": 4,
+      "name": "Consultoría de procesos industriales",
+      "status": "active",
+      "type": "Servicios",
+      "client": "Manufacturas Técnicas",
+      "start_date": "2025-03-01T00:00:00.000Z",
+      "end_date": "2025-05-30T00:00:00.000Z",
+      "budget": 45000
+    },
+    {
+      "id": 5,
+      "name": "Distribución de componentes eléctricos",
+      "status": "active",
+      "type": "Comercial",
+      "client": "Electrónica Avanzada",
+      "start_date": "2025-02-20T00:00:00.000Z",
+      "end_date": "2025-04-15T00:00:00.000Z",
+      "budget": 68000
+    },
+    {
+      "id": 6,
+      "name": "Mantenimiento preventivo de equipos",
+      "status": "active",
+      "type": "PMP",
+      "client": "Industrias Químicas S.A.",
+      "start_date": "2025-03-10T00:00:00.000Z",
+      "end_date": "2026-03-10T00:00:00.000Z",
+      "budget": 120000
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "code": "X001",
+      "name": "Martínez Sánchez José",
+      "email": "martinezjose@gmail.com",
+      "nss": "12345678",
+      "employer_registration": "D12345678",
+      "hire_date": "2025-03-24T21:27:37.000Z",
+      "daily_salary": 1000,
+      "department_id": "Almacén",
+      "position": "Supervisor de Calidad",
+      "cost_center": "942",
+      "status": "A"
+    },
+    {
+      "id": 2,
+      "code": "X004",
+      "name": "Rodríguez Pérez María",
+      "email": "rodriguezmaria@gmail.com",
+      "nss": "87654321",
+      "employer_registration": "D87654321",
+      "hire_date": "2022-01-01T00:00:00.000Z",
+      "daily_salary": 800,
+      "department_id": "Ventas",
+      "position": "Vendedor",
+      "cost_center": "941",
+      "status": "R"
+    },
+    {
+      "id": 3,
+      "code": "X005",
+      "name": "García López Carlos",
+      "email": "garcialopezcarlos@gmail.com",
+      "nss": "23456789",
+      "employer_registration": "D23456789",
+      "hire_date": "2020-06-01T00:00:00.000Z",
+      "daily_salary": 1200,
+      "department_id": "Administración",
+      "position": "Supervisor de Administración",
+      "cost_center": "945",
+      "status": "A"
+    }
+  ]
+}

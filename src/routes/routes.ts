@@ -1,6 +1,7 @@
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 // Modules
 import UsersModule from '@/views/users/UsersModule.vue'
+import DepartmentsModule from '@/views/departments/DepartmentsModule.vue'
 // Views
 import SignInView from '@/views/auth/SignInView.vue'
 import HomeView from '@/views/HomeView.vue'
@@ -10,6 +11,7 @@ import UsersView from '@/views/users/views/UsersView.vue'
 import CreateUserView from '@/views/users/views/CreateUserView.vue'
 import ReportsView from '@/views/ReportsView.vue'
 import SettingsView from '@/views/SettingsView.vue'
+import DepartmentsView from '@/views/departments/views/DepartmentsView.vue'
 
 const routes = [
   {
@@ -57,6 +59,18 @@ const routes = [
             path: 'create',
             name: 'CreateUser',
             component: CreateUserView,
+          },
+        ],
+      },
+      {
+        path: '/main/departments',
+        name: 'DepartmentsModule',
+        component: DepartmentsModule,
+        children: [
+          {
+            path: '',
+            name: 'Departments',
+            component: DepartmentsView,
           },
         ],
       },

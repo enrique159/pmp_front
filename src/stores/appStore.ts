@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { User } from '@/types/User'
+import { User } from '@/app/modules/users/domain/user'
 import { RemovableRef, useLocalStorage } from '@vueuse/core'
 
 interface AppState {
@@ -14,7 +14,7 @@ export const useAppStore = defineStore('app', {
       id: '',
       name: '',
       email: '',
-    }),
+    } as Partial<User>),
   }),
   actions: {
     setToken(newToken: string) {

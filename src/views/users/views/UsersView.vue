@@ -9,36 +9,41 @@
       <div class="card-body">
         <div class="flex justify-between items-center mb-4">
           <h2 class="card-title">Lista de Usuarios</h2>
-          <router-link class="btn btn-primary" role="button" :to="{ name: 'CreateUser' }">Nuevo Usuario</router-link>
+          <router-link class="btn btn-primary rounded-full" role="button" :to="{ name: 'CreateUser' }">
+            <IconUserPlus />
+            Nuevo Usuario
+          </router-link>
         </div>
         <!-- User list with roles and status -->
         <div class="overflow-x-auto">
-          <table class="table w-full">
+          <table class="table table-zebra w-full">
             <thead>
               <tr>
-                <th>Usuario</th>
+                <th>Código</th>
+                <th>Nombre</th>
                 <th>Correo</th>
-                <th>Rol</th>
+                <th>Departamento</th>
+                <th>Puesto</th>
+                <th>Centro de Costos</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="hover">
-                <td class="flex items-center gap-2">
-                  <div class="avatar avatar-placeholder">
-                    <div class="bg-neutral text-neutral-content w-8 rounded-full">
-                      <span>AA</span>
-                    </div>
-                  </div>
-                  <span>Ana Alvarez</span>
-                </td>
-                <td>ana.alvarez@example.com</td>
-                <td><span class="badge badge-ghost">Administrador</span></td>
-                <td><span class="badge badge-success">Activo</span></td>
+              <tr class="hover" v-for="user in users" :key="`row-user-${user.id}`">
+                <td>{{ user.code }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.department_id }}</td>
+                <td>{{ user.position }}</td>
+                <td><span class="badge badge-ghost">{{ user.cost_center }}</span></td>
                 <td>
-                  <button class="btn btn-ghost btn-xs">Editar</button>
-                  <button class="btn btn-ghost btn-xs text-error">Desactivar</button>
+                  <span class="badge" :class="{ 'badge-success text-white': user.status === 'A', 'badge-neutral': user.status === 'R' }">
+                    {{ user.status === 'A' ? 'activo' : 'inactivo' }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs" @click="handleEditUser(user)">Editar</button>
                 </td>
               </tr>
             </tbody>
@@ -47,8 +52,55 @@
       </div>
     </div>
   </div>
+
+  <!-- EDIT USER -->
+  <BasicModal v-model="showEditUserModal" title="Editar Usuario" allow-close>
+    <template #content>
+      <EditUser :selected-user="selectedUser" @update:user="handleUpdateUser" />
+    </template>
+  </BasicModal>
 </template>
 
 <script lang="ts" setup>
-// Component logic will be added here
+import BasicModal from '@/components/BasicModal.vue';
+import EditUser from '@/views/users/components/EditUser.vue';
+import { IconUserPlus } from '@tabler/icons-vue';
+import { useUsers } from '@/composables/useUsers';
+import { ref } from 'vue';
+import { User } from '@/app/modules/users/domain/user';
+
+const { users, fetchUsers } = useUsers();
+
+const loadingUsers = ref(false);
+const getUsers = async () => {
+  loadingUsers.value = true;
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  await fetchUsers()
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loadingUsers.value = false;
+    });
+};
+
+getUsers();
+
+
+// UPDATE USER
+const showEditUserModal = ref(false);
+const selectedUser = ref<User | null>(null);
+
+const handleEditUser = (user: User) => {
+  selectedUser.value = user;
+  showEditUserModal.value = true;
+};
+
+const handleUpdateUser = (user: User) => {
+  selectedUser.value = user;
+  showEditUserModal.value = false;
+};
 </script>

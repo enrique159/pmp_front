@@ -1,5 +1,5 @@
 import { useAppStore } from '@/stores/appStore'
-import { User } from '@/types/User'
+import { User } from '@/app/modules/users/domain/user'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 

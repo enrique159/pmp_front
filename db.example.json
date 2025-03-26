@@ -1,0 +1,59 @@
+{
+  "departments": [
+    { "id": 1, "nombre": "Sales" },
+    { "id": 2, "nombre": "Marketing" }
+  ],
+  "activities": [
+    { "id": 1, "department_id": 1, "code": "CAL-2", "name": "Calidad" },
+    { "id": 2, "department_id": 1, "code": "CAL-1", "name": "Seguimiento a proyectos" },
+    { "id": 3, "department_id": 2, "code": "MAR-1", "name": "Marketing" },
+    { "id": 4, "department_id": 2, "code": "MAR-2", "name": "Marketing 2" }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "codigo": "X001",
+      "nombre": "Martínez Sánchez José",
+      "email": "martinezjose@gmail.com",
+      "nss": "12345678",
+      "registro_patronal": "D12345678",
+      "fecha_ingreso": "2025-03-24T21:27:37.000Z",
+      "salario_diario": 1000,
+      "salario_diario_integrado": 1000,
+      "departamento": "Almacén",
+      "puesto": "Supervisor de Calidad",
+      "centro_costos": "942",
+      "estatus": "A"
+    },
+    {
+      "id": 2,
+      "codigo": "X004",
+      "nombre": "Rodríguez Pérez María",
+      "email": "rodriguezmaria@gmail.com",
+      "nss": "87654321",
+      "registro_patronal": "D87654321",
+      "fecha_ingreso": "2022-01-01T00:00:00.000Z",
+      "salario_diario": 800,
+      "salario_diario_integrado": 800,
+      "departamento": "Ventas",
+      "puesto": "Vendedor",
+      "centro_costos": "941",
+      "estatus": "R"
+    },
+    {
+      "id": 3,
+      "codigo": "X005",
+      "nombre": "García López Carlos",
+      "email": "garcialopezcarlos@gmail.com",
+      "nss": "23456789",
+      "registro_patronal": "D23456789",
+      "fecha_ingreso": "2020-06-01T00:00:00.000Z",
+      "salario_diario": 1200,
+      "salario_diario_integrado": 1200,
+      "departamento": "Administración",
+      "puesto": "Supervisor de Administración",
+      "centro_costos": "945",
+      "estatus": "A"
+    }
+  ]
+}

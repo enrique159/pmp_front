@@ -1,5 +1,5 @@
 export const validateOnlyNumbers = (event: any) => {
-  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'] // Teclas permitidas
+  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'] // Teclas permitidas
   const key = event.key
 
   if (allowedKeys.includes(key)) {
@@ -13,7 +13,7 @@ export const validateOnlyNumbers = (event: any) => {
 }
 
 export const validateNumbersAndLetters = (event: any) => {
-  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'] // Teclas permitidas
+  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'] // Teclas permitidas
   const key = event.key
 
   if (allowedKeys.includes(key)) {
@@ -27,7 +27,7 @@ export const validateNumbersAndLetters = (event: any) => {
 }
 
 export const validateNumbersAndDots = (event: any, value = '') => {
-  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'] // Teclas permitidas
+  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'] // Teclas permitidas
   const key = event.key
 
   if (allowedKeys.includes(key)) {

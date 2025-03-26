@@ -1,3 +1,3 @@
 export default {
-  apiBase: import.meta.env.VITE_APP_BASE_URL || 'http://localhost:3333',
+  apiBase: import.meta.env.VITE_APP_API_URL || 'http://localhost:3000',
 }

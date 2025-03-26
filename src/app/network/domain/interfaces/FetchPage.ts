@@ -1,7 +1,7 @@
 export type PageFilters = {
-  search: string
-  page: number
-  limit: number
+  search?: string
+  page?: number
+  limit?: number
   orderBy?: string
   sort?: 'asc' | 'desc' | ''
 }

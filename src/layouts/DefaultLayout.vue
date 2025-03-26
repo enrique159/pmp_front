@@ -23,16 +23,16 @@
           v-for="item in menuItems"
           :key="`menu-item-${item.name}`"
           class="flex justify-center items-center"
+          @click="goTo(item.path)"
         >
           <div class="tooltip tooltip-right" :data-tip="item.name">
-            <router-link
-              :to="item.path"
+            <a
               :class="[
                 isCurrentPath(item.module) ? 'text-b-tertiary' : 'text-b-black-2',
               ]"
             >
               <component :is="item.icon" class="w-6 h-6" />
-            </router-link>
+          </a>
           </div>
         </li>
       </ul>
@@ -40,7 +40,7 @@
       <div class="flex flex-col gap-y-4">
         <button class="cursor-pointer flex items-center" :class="{ 'justify-center items-center': !expandMenu, 'hover:bg-b-white-2 rounded-3xl p-2': expandMenu }">
           <div class="avatar avatar-placeholder">
-            <div class="bg-neutral text-neutral-content w-12 rounded-full hover:outline-2 hover:outline-b-secondary hover:border-white hover:border-2 transition-all">
+            <div class="bg-neutral text-neutral-content w-10 rounded-full hover:outline-2 hover:outline-b-secondary hover:border-white hover:border-2 transition-all">
               <span>{{ getUserAbbreviation }}</span>
             </div>
           </div>
@@ -74,9 +74,9 @@
 import { computed, ref } from 'vue'
 import {
   IconChevronRight,
-  IconBrandAsana,
+  IconFidgetSpinner,
   IconSmartHome,
-  IconTopologyRing3,
+  IconCategory,
   IconChartBar,
   IconUsersGroup,
   IconSettings,
@@ -108,13 +108,13 @@ const menuItems = [
     name: 'Proyectos',
     path: '/main/projects',
     module: 'projects',
-    icon: IconBrandAsana,
+    icon: IconFidgetSpinner,
   },
   {
-    name: 'Tareas',
-    path: '/main/tasks',
-    module: 'tasks',
-    icon: IconTopologyRing3,
+    name: 'Departamentos',
+    path: '/main/departments',
+    module: 'departments',
+    icon: IconCategory,
   },
   {
     name: 'Usuarios',
@@ -137,6 +137,10 @@ const menuItems = [
 ]
 
 const isCurrentPath = (path: string) => path === currentPath.value
+
+const goTo = (path: string) => {
+  router.push(path)
+}
 </script>
 
 <style></style>

@@ -83,8 +83,8 @@ const handleSubmit = async () => {
   setToken('hello_world')
   setUser({
     id: '1',
-    name: 'Enrique',
-    email: 'enrique@gmail.com',
+    name: 'José Alonso',
+    email: username.value,
   })
   loading.value = LoadState.success
   router.push({ name: 'Home' })
