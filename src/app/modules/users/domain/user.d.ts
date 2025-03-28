@@ -14,3 +14,8 @@ interface User extends Base {
   cost_center?: string
   status: string
 }
+
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive'
+}

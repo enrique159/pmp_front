@@ -66,7 +66,9 @@
         />
       </button>
     </section>
-    <router-view></router-view>
+    <div class="overflow-y-auto w-full">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -74,12 +76,13 @@
 import { computed, ref } from 'vue'
 import {
   IconChevronRight,
-  IconFidgetSpinner,
+  IconUsers,
   IconSmartHome,
   IconCategory,
   IconChartBar,
   IconUsersGroup,
   IconSettings,
+  IconStackMiddle,
   IconLogout2
 } from '@tabler/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -105,10 +108,16 @@ const menuItems = [
     icon: IconSmartHome,
   },
   {
+    name: 'Clientes',
+    path: '/main/clients',
+    module: 'clients',
+    icon: IconUsers,
+  },
+  {
     name: 'Proyectos',
     path: '/main/projects',
     module: 'projects',
-    icon: IconFidgetSpinner,
+    icon: IconStackMiddle,
   },
   {
     name: 'Departamentos',

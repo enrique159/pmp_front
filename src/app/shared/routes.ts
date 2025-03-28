@@ -31,6 +31,13 @@ const createProject = (baseUrl: string) => `${finishSlash(baseUrl)}projects`
 const updateProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
 const deleteProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
 
+// CLIENTS ROUTES
+const getClients = (baseUrl: string) => `${finishSlash(baseUrl)}clients`
+const getClient = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}clients/${id}`
+const createClient = (baseUrl: string) => `${finishSlash(baseUrl)}clients`
+const updateClient = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}clients/${id}`
+const deleteClient = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}clients/${id}`
+
 export default {
   // AUTH ROUTES
   signIn,
@@ -59,4 +66,11 @@ export default {
   createActivity,
   updateActivity,
   deleteActivity,
+
+  // CLIENTS ROUTES
+  getClients,
+  getClient,
+  createClient,
+  updateClient,
+  deleteClient,
 }

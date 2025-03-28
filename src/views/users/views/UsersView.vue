@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 w-full h-full bg-white-1 overflow-y-auto container mx-auto">
+  <div class="p-6 w-full h-full bg-white-1 container mx-auto">
     <header class="mb-6">
       <h1 class="text-3xl font-bold text-black-1">Usuarios</h1>
       <p class="text-black-2">Gestiona los usuarios y sus roles en el sistema</p>
@@ -42,8 +42,8 @@
                 <td>{{ user.position }}</td>
                 <td><span v-if="user.cost_center" class="badge badge-ghost">{{ user.cost_center }}</span></td>
                 <td>
-                  <span class="badge" :class="{ 'badge-success text-white': user.status === 'A', 'badge-neutral': user.status === 'R' }">
-                    {{ user.status === 'A' ? 'activo' : 'inactivo' }}
+                  <span class="badge" :class="{ 'badge-success text-white': user.status === UserStatus.ACTIVE, 'badge-neutral': user.status === UserStatus.INACTIVE }">
+                    {{ user.status === UserStatus.ACTIVE ? 'activo' : 'inactivo' }}
                   </span>
                 </td>
                 <td class="flex justify-center gap-2 items-center">
@@ -80,7 +80,7 @@ import EditUser from '@/views/users/components/EditUser.vue';
 import { IconUserPlus, IconEdit, IconTrash } from '@tabler/icons-vue';
 import { useUsers } from '@/composables/useUsers';
 import { ref } from 'vue';
-import { User } from '@/app/modules/users/domain/user';
+import { User, UserStatus } from '@/app/modules/users/domain/user.d';
 import { useDepartments } from '@/composables/useDepartments';
 import { useToast } from '@/composables/useToast';
 

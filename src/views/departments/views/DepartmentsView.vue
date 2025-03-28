@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 bg-white-1 overflow-y-auto container mx-auto">
+  <div class="p-6 bg-white-1 container mx-auto">
     <header class="mb-6">
       <h1 class="text-3xl font-bold text-black-1">Departamentos</h1>
       <p class="text-black-2">Gestiona los departamentos y áreas</p>

@@ -197,6 +197,7 @@ import { validateNumbersAndLetters, validateOnlyNumbers } from '@/utils/InputVal
 import { useUsers } from '@/composables/useUsers'
 import { User } from '@/app/modules/users/domain/user'
 import { useDepartments } from '@/composables/useDepartments'
+import { useRouter } from 'vue-router'
 
 const { warning, success, error } = useToast()
 const showPassword = ref(false)
@@ -274,6 +275,7 @@ onMounted(() => {
   fetchDepartments()
 })
 
+const router = useRouter()
 const loadingCreateUser = ref(false)
 const handleSubmit = async() => {
   const isFormValid = await v$.value.$validate()
@@ -289,6 +291,7 @@ const handleSubmit = async() => {
   await createUser(payload)
     .then(() => {
       success('Usuario creado exitosamente')
+      router.push({ name: 'Users' })
     })
     .catch((err) => {
       console.log(err)
