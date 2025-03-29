@@ -27,6 +27,7 @@ import { Client } from '@/app/modules/clients/domain/client';
 import { useProjects } from '@/composables/useProjects';
 import { Project } from '@/app/modules/projects/domain/project';
 import { useToast } from '@/composables/useToast';
+import { useRouter } from 'vue-router';
 
 const { error } = useToast()
 
@@ -59,8 +60,11 @@ const fetchProjects = async () => {
     })
 }
 
+const router = useRouter()
 const goToProject = (id: string | undefined) => {
-  console.log(id)
+  if (id) {
+    router.push({ name: 'ProjectDetails', params: { id } })
+  }
 }
 
 defineExpose({

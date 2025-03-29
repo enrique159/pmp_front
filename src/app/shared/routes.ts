@@ -31,6 +31,13 @@ const createProject = (baseUrl: string) => `${finishSlash(baseUrl)}projects`
 const updateProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
 const deleteProject = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}projects/${id}`
 
+// PROJECT TASKS ROUTES
+const getTasks = (baseUrl: string) => `${finishSlash(baseUrl)}tasks`
+const getTask = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}tasks/${id}`
+const createTask = (baseUrl: string) => `${finishSlash(baseUrl)}tasks`
+const updateTask = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}tasks/${id}`
+const deleteTask = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}tasks/${id}`
+
 // CLIENTS ROUTES
 const getClients = (baseUrl: string) => `${finishSlash(baseUrl)}clients`
 const getClient = (baseUrl: string, id: string) => `${finishSlash(baseUrl)}clients/${id}`
@@ -60,6 +67,12 @@ export default {
   createProject,
   updateProject,
   deleteProject,
+  // PROJECT TASKS ROUTES
+  getTasks,
+  getTask,
+  createTask,
+  updateTask,
+  deleteTask,
   // ACTIVITIES ROUTES
   getActivities,
   getActivity,

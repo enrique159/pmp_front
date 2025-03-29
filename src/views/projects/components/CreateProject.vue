@@ -38,6 +38,19 @@
           <span v-for="(error, index) in v.description.$errors" :key="`error-description-${index}`">{{ error.$message }}</span>
         </div>
       </fieldset>
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Tipo</legend>
+        <select
+          v-model="createProjectForm.type"
+          class="select select-bordered w-full"
+        >
+          <option value="" disabled>-- Seleccione un tipo --</option>
+          <option v-for="(type, index) in ProjectType" :key="`option-type-${index}`" :value="type">
+            {{ type }}
+          </option>
+        </select>
+      </fieldset>
+
       <div class="card-actions justify-end">
         <button type="submit" class="btn btn-primary rounded-full" :disabled="loadingCreateProject">
           <span v-if="loadingCreateProject" class="loading loading-spinner loading-xs"></span>

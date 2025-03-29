@@ -74,42 +74,64 @@
           <h2 class="card-title">Actividades</h2>
           <button
             class="btn bg-b-primary text-white rounded-full"
+            @click="showCreateTaskModal = true"
           >
             <IconPlus />
             Registrar actividad
           </button>
         </div>
-        <!-- User list with roles and status -->
-        <!-- <div class="overflow-x-auto">
+        <div class="overflow-x-auto">
           <table class="table w-full">
             <thead>
               <tr>
                 <th class="w-12"></th>
                 <th class="w-28">Código</th>
+                <th>Actividad</th>
                 <th>Descripción</th>
-                <th>Departamento</th>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Estado</th>
+                <th>Horas</th>
+                <th>Horas extra</th>
+                <th>Aprobado por</th>
                 <th class="w-10">Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr
                 class="hover"
-                v-for="(activity, index) in filterActivitiesByDepartment"
-                :key="`row-activity-${activity.id}`"
+                v-for="(task, index) in filteredTasks"
+                :key="`row-activity-${task.id}`"
               >
                 <td>{{ index + 1 }}</td>
                 <td>
                   <div class="badge badge-neutral badge-ghost rounded-full">
-                    <span class="text-xs font-medium">{{ activity.code }}</span>
+                    <span class="text-xs font-medium">{{ task.code }}</span>
                   </div>
                 </td>
-                <td>{{ activity.description }}</td>
-                <td>{{ activity.department }}</td>
+                <td>{{ task.activity }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ formatDatetimeShort(task.date) }}</td>
+                <td>{{ task.user }}</td>
+                <td>
+                  <div
+                    class="badge rounded-full"
+                    :class="{
+                      'badge-warning': task.status === TaskStatus.PENDING,
+                      'badge-success text-white': task.status === TaskStatus.APPROVED,
+                      'badge-error': task.status === TaskStatus.REJECTED
+                    }"
+                  >
+                    {{ task.status === TaskStatus.PENDING ? 'Pendiente' : task.status === TaskStatus.APPROVED ? 'Aprobado' : 'Rechazado' }}
+                  </div>
+                </td>
+                <td>{{ task.hours }}</td>
+                <td>{{ task.extra_hours || 0 }}</td>
+                <td>{{ task.approvedBy?.name || '-' }}</td>
                 <td class="flex justify-center gap-2 items-center">
                   <div class="tooltip tooltip-left" data-tip="Editar">
                     <button
                       class="btn btn-ghost btn-circle btn-sm"
-                      @click="handleEditActivity(activity)"
                     >
                       <IconEdit />
                     </button>
@@ -117,8 +139,6 @@
                   <div class="tooltip tooltip-left" data-tip="Eliminar">
                     <button
                       class="btn btn-ghost btn-circle btn-sm text-red-400"
-                      :disabled="loadingDeleteActivity"
-                      @click="handleDeleteActivity(activity)"
                     >
                       <IconTrash />
                     </button>
@@ -127,22 +147,41 @@
               </tr>
             </tbody>
           </table>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
+
+  <basic-modal
+    v-model="showCreateTaskModal"
+    title="Registrar actividad"
+    allow-close
+  >
+    <template #content>
+      <create-task :project-id="currentProject?.id" @created="showCreateTaskModal = false" />
+    </template>
+  </basic-modal>
 </template>
 
 <script setup lang="ts">
+import BasicModal from '@/components/BasicModal.vue'
+import CreateTask from '../components/CreateTask.vue'
 import { useClients } from '@/composables/useClients'
 import { useProjects } from '@/composables/useProjects'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { IconExclamationCircle, IconEditCircle, IconArrowLeft } from '@tabler/icons-vue'
+import { IconExclamationCircle, IconEditCircle, IconArrowLeft, IconPlus, IconTrash, IconEdit } from '@tabler/icons-vue'
+import { useDepartments } from '@/composables/useDepartments'
+import { useUsers } from '@/composables/useUsers'
+import { useDate } from '@/composables/useDate'
+import { TaskStatus } from '@/app/modules/tasks/domain/task.d'
 
+const { formatDatetimeShort } = useDate()
 const route = useRoute()
-const { projects, getProjects } = useProjects()
+const { projects, getProjects, getTasks, tasks } = useProjects()
+const { activities, getActivities } = useDepartments()
 const { clients, getClients } = useClients()
+const { users, fetchUsers } = useUsers()
 
 const projectId = route.params.id
 
@@ -154,9 +193,12 @@ const currentClient = computed(() =>
 )
 
 const fetchData = async () => {
-  if (!projects.value.length || !clients.value.length) {
+  if (!projects.value.length || !clients.value.length || !users.value.length) {
     await getProjects({})
     await getClients({})
+    await getTasks({})
+    await getActivities({})
+    await fetchUsers({})
   }
 }
 
@@ -164,4 +206,16 @@ fetchData()
 
 // EDIT PROJECT
 const showEditProjectModal = ref(false)
+
+const filteredTasks = computed(() =>
+  tasks.value.filter((t) => t.project_id === projectId).map((t) => ({
+    ...t,
+    code: activities.value.find((a) => a.id === t.activity_id)?.code || '-',
+    activity: activities.value.find((a) => a.id === t.activity_id)?.description || '-',
+    user: users.value.find((u) => u.id == t.user_id)?.name || '-',
+    approvedBy: t.approved_by ? users.value.find((u) => u.id === t.approved_by) : null,
+  }))
+)
+
+const showCreateTaskModal = ref(false)
 </script>

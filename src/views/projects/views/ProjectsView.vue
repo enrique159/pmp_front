@@ -1,11 +1,11 @@
 <template>
-  <div class="p-6 w-full h-full bg-white-1 container mx-auto">
+  <div class="p-6 bg-white-1 container mx-auto">
     <header class="mb-6">
       <h1 class="text-3xl font-bold text-black-1">Proyectos</h1>
       <p class="text-black-2">Gestiona y monitorea todos los proyectos</p>
     </header>
 
-    <div class="card bg-white shadow-sm">
+    <div class="card bg-white shadow-sm mb-8">
       <div class="card-body">
         <div class="flex justify-between items-center mb-4">
           <h2 class="card-title">Lista de Proyectos</h2>
@@ -107,7 +107,10 @@
     fit-to-content
   >
     <template #content>
-      <create-project />
+      <create-project @project:created="() => {
+        showCreateProjectModal = false
+        fetchData()
+      }" />
     </template>
   </basic-modal>
 </template>

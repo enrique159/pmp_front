@@ -1,11 +1,11 @@
 <template>
-  <div class="p-6 w-full h-full bg-white-1 container mx-auto">
+  <div class="p-6 bg-white-1 container mx-auto">
     <header class="mb-6">
       <h1 class="text-3xl font-bold text-black-1">Clientes</h1>
       <p class="text-black-2">Gestiona los clientes y sus datos</p>
     </header>
 
-    <div class="card bg-white shadow-sm">
+    <div class="card bg-white shadow-sm mb-8">
       <div class="card-body">
         <div class="flex justify-between items-center mb-4">
           <h2 class="card-title">Lista de Clientes</h2>
@@ -92,10 +92,6 @@
           <IconPlus />
           Nuevo proyecto
         </button>
-        <button class="btn btn-primary rounded-full px-4">
-          <IconStackPush />
-          Asociar proyecto
-        </button>
       </div>
     </template>
   </BasicModal>
@@ -113,7 +109,7 @@
 <script setup lang="ts">
 import CreateProject from '@/views/projects/components/CreateProject.vue';
 import ProjectsClient from '@/views/clients/components/ProjectsClient.vue';
-import { IconEdit, IconTrash, IconPlus, IconStackMiddle, IconStackPush } from '@tabler/icons-vue';
+import { IconEdit, IconTrash, IconPlus, IconStackMiddle } from '@tabler/icons-vue';
 import { useClients } from '@/composables/useClients';
 import { useToast } from '@/composables/useToast';
 import { ref } from 'vue';
