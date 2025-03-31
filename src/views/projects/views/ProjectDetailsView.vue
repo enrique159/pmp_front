@@ -67,8 +67,16 @@
       </div>
     </div>
 
-    <!-- ACTIVITES -->
-    <div class="card bg-white shadow-sm">
+    <!-- ACTIVITIES -->
+    <div v-if="loadingData" class="w-full grid place-items-center h-[160px]">
+      <span
+        class="loading loading-spinner text-b-secondary loading-xl"
+      ></span>
+      <p class="text-b-black-2 font-bold text-center">
+        Cargando proyectos...
+      </p>
+    </div>
+    <div v-else class="card bg-white shadow-sm">
       <div class="card-body">
         <div class="flex justify-between items-center flex-wrap mb-4">
           <h2 class="card-title">Actividades</h2>
@@ -192,7 +200,9 @@ const currentClient = computed(() =>
   clients.value.find((c) => c.id === currentProject.value?.client_id)
 )
 
+const loadingData = ref(false)
 const fetchData = async () => {
+  loadingData.value = true
   if (!projects.value.length || !clients.value.length || !users.value.length) {
     await getProjects({})
     await getClients({})
@@ -200,6 +210,7 @@ const fetchData = async () => {
     await getActivities({})
     await fetchUsers({})
   }
+  loadingData.value = false
 }
 
 fetchData()

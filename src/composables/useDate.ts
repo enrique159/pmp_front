@@ -20,6 +20,11 @@ export const useDate = () => {
     return dayjs.utc(date).tz(tz).locale('es').format('dddd, D [de] MMMM [de] YYYY hh:mm:ss a')
   }
 
+  const formatDateLong = (date: Date | string | undefined) => {
+    if (!date) return ''
+    return dayjs.utc(date).tz(tz).locale('es').format('dddd, D [de] MMMM [de] YYYY')
+  }
+
   const formatDatetimeShort = (date: Date | string | undefined) => {
     if (!date) return ''
     return dayjs.utc(date).tz(tz).locale('es').format('DD/MM/YYYY HH:mm')
@@ -48,6 +53,7 @@ export const useDate = () => {
   return {
     getCurrentDate,
     formatDatetime,
+    formatDateLong,
     formatDatetimeShort,
     formatDateShort,
     formatDate,

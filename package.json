@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"node api/server.js\"",
-    "dev:front": "vite",
+    "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
