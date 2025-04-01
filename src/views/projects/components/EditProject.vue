@@ -60,7 +60,7 @@ import { IconDeviceFloppy } from '@tabler/icons-vue'
 import { Project, ProjectType } from '@/app/modules/projects/domain/project'
 import { useClients } from '@/composables/useClients'
 
-const { success, warning, error } = useToast()
+const { warning } = useToast()
 const { clients } = useClients()
 
 const emits = defineEmits(['updated'])
